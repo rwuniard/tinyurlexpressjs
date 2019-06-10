@@ -1,0 +1,26 @@
+{
+  "name": "tinyurlexpressjs",
+  "version": "1.0.0",
+  "description": "Generate tiny URL",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index",
+    "dev": "nodemon index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rwuniard/tinyurlexpressjs.git"
+  },
+  "author": "Ronson Wuniardy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rwuniard/tinyurlexpressjs/issues"
+  },
+  "homepage": "https://github.com/rwuniard/tinyurlexpressjs#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}
