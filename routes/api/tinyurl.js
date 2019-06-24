@@ -3,13 +3,13 @@ const router = express.Router();
 const map = new String('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789');
 
 //Set REST API
-router.get('/getTinyUrl', (req, res) => {
+router.get('/getHash', (req, res) => {
     var url = idToShortURL(12345);
 
     console.log(url);
     res.json(url);
 
-})
+});
 
 router.get('/getId', (req, res) => {
     var id = reverseTinyURL('dnh');
@@ -17,7 +17,28 @@ router.get('/getId', (req, res) => {
     console.log(id);
     res.json(id);
 
-})
+});
+
+// Get Tiny URL
+router.post('/getTinyUrl', (req, res) => {
+    const tinyId = 12345;
+    const data = {
+        id : tinyId,
+        origAddress: req.body.address,
+        newAddress: ""
+    }
+    console.log(data.id);
+    console.log(data.origAddress);
+
+    if (data.length == 0) {
+        res.status(400).json({msg: 'Please include a URL address'});
+    }
+    else {
+        data.newAddress = "http://localhost/dhs"
+        console.log(data.origAddress);
+        res.json(data);
+    }
+});
 
 function idToShortURL(id) {
     var tinyUrl = "";
