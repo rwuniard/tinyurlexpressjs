@@ -18,7 +18,8 @@
   },
   "homepage": "https://github.com/rwuniard/tinyurlexpressjs#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "redis": "^2.8.0"
   },
   "devDependencies": {
     "nodemon": "^1.19.1"

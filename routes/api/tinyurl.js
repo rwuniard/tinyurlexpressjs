@@ -1,29 +1,39 @@
 const express = require('express');
 const router = express.Router();
+const DataAccess = require('../redis/myRedis');
+const counter = require('../../mastercounter');
 const map = new String('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789');
+
+//Initialize redis
+var da = new DataAccess("localhost", 6379);
+// Increment the id immediately.
+// I am not sure if this is guaranteed to make this id unique across many instances.
+// @TODO Need to double check if this will not cause race condition across many instances.
+da.incrementId();
 
 //Set REST API
 router.get('/getHash', (req, res) => {
-    var url = idToShortURL(12345);
-
+    var url = idToShortURL(counter);
     console.log(url);
     res.json(url);
-
+    da.incrementId();
 });
 
+// Get the Id.
 router.get('/getId', (req, res) => {
     var id = reverseTinyURL('dnh');
 
     console.log(id);
     res.json(id);
+    
 
 });
 
 // Get Tiny URL
 router.post('/getTinyUrl', (req, res) => {
-    const tinyId = 12345;
+
     const data = {
-        id : tinyId,
+        id : counter.mycounter,
         origAddress: req.body.address,
         newAddress: ""
     }
@@ -34,10 +44,11 @@ router.post('/getTinyUrl', (req, res) => {
         res.status(400).json({msg: 'Please include a URL address'});
     }
     else {
-        data.newAddress = "http://localhost/dhs"
+        data.newAddress = "http://localhost/" + idToShortURL(data.id);
         console.log(data.origAddress);
         res.json(data);
     }
+    da.incrementId();
 });
 
 function idToShortURL(id) {
@@ -63,20 +74,9 @@ function reverseTinyURL(tinyUrl) {
         if ('0'.charCodeAt(0) <= tinyUrl.charCodeAt(i) && tinyUrl.charCodeAt(i) <= '9'.charCodeAt(0)) {
             id = (id *62) + tinyUrl.charCodeAt(i) - '0'.charCodeAt(0);
         }
-
     }
     return id;
-    // int id = 0;
-    // for (int i = 0; i < tinyURL.length(); i++) {
 
-    //     if ('a' <= tinyURL.charAt(i) && tinyURL.charAt(i) <= 'z')
-    //         id = (id * 62) + tinyURL.charAt(i) - 'a';
-    //     if ('A' <= tinyURL.charAt(i) && tinyURL.charAt(i) <= 'Z')
-    //         id = (id * 62) + tinyURL.charAt(i) - 'Z';
-    //     if ('0' <= tinyURL.charAt(i) && tinyURL.charAt(i) <= '9')
-    //         id = (id * 62) + tinyURL.charAt(i) - '0';
-    // }
-    // return id;
 }
 
 
