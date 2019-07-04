@@ -1,6 +1,6 @@
 const myRedis = require('redis');
-const counter = require('../../mastercounter');
-
+// const counter = require('../../mastercounter');
+const Promise = require('promise');
 
 class DataAccess {
     constructor(machine_name, port) {
@@ -10,22 +10,40 @@ class DataAccess {
     }
 
     incrementId() {
-        this.client.incr('masterCounter', (error, result) => {
-            if(error) {
-                console.log('Error incrementing masterCounter:' + error);
-            }
-            console.log('id:' + result);
-            counter.mycounter = result;
+        var that = this; // I need to assign it to that, otherwise the this will not be defined inside the Promise.
+        return new Promise(function(resolve, reject) {
+            that.client.incr('masterCounter', (error, result) => {
+                if(error) {
+                    console.log('Error incrementing masterCounter:' + error);
+                    reject(error);
+                }
+                else {
+                    console.log('incrementId:' + result);
+                    resolve(result);
+                }
+                
+                
+            });
         });
+       
     }
 
     getNextId() {
-        this.client.get('masterCounter', (error, result) => {
-            if (error) {
-                console.log('Error getting masterCounter:' + error);
-            }
-            counter = result;
-        })
+        var that = this; // I need to assign it to that, otherwise the this will not be defined inside the Promise.
+        return new Promise(function(resolve, reject) {
+
+            that.client.get('masterCounter', (error, result) => {
+                if (error) {
+                    console.log('Error getting masterCounter:' + error);
+                    reject(error);
+                }
+                else {
+                    console.log('getNextId result: ' + result);
+                    resolve(result);
+                }
+            });
+        });
+        
     }
 }
 

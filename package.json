@@ -19,6 +19,7 @@
   "homepage": "https://github.com/rwuniard/tinyurlexpressjs#readme",
   "dependencies": {
     "express": "^4.17.1",
+    "promise": "^8.0.3",
     "redis": "^2.8.0"
   },
   "devDependencies": {
