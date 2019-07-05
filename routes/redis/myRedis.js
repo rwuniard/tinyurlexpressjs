@@ -1,5 +1,4 @@
 const myRedis = require('redis');
-// const counter = require('../../mastercounter');
 const Promise = require('promise');
 
 class DataAccess {
@@ -45,28 +44,39 @@ class DataAccess {
         });
         
     }
+
+    setTinyUrl(tinyUrlId, destAddr) {
+        var that = this;
+        return new Promise(function (resolve, reject) {
+            that.client.set(tinyUrlId, destAddr, (error, result) => {
+                if (error) {
+                    console.log('Error setting tinyUrl: ' + tinyUrlId + ' with error: '+ error);
+                    reject(error);
+                }
+                else {
+                    console.log('Successfully set tinyUrl: ' + tinyUrlId);
+                    resolve(result);
+                }
+            });
+        });
+    }
+
+    getRealAddr(tinyUrlId) {
+        var that = this;
+        return new Promise((resolve, reject) => {
+            that.client.get(tinyUrlId, (error, result) => {
+                if (error) {
+                    console.log('Error getting tinyUrlId: ' + tinyUrlId);
+                    reject(error);
+                }
+                else {
+                    console.log('Successfully getting tinyUrlId: ' + tinyUrlId + ' result: ' + result);
+                    resolve(result);
+                }
+            });
+        });
+    }
 }
 
-// var port = 6379;
-// var host = "127.0.0.1";
-
-// var client = myRedis.createClient(port, host);
-
-// client.on('connect', ()=> {
-//     console.log('Redis client connected');
-// });
-
-// client.on('error', (err)=> {
-//     console.log("Something went wrong:" + err);
-// });
-
-// client.set("masterCounter", 10000, myRedis.print);
-// client.get('masterCounter', (error, result) => {
-//     if (error) {
-//         console.log(error);
-//         throw error;
-//     }
-//     console.log('masterCounter:' + result);
-// });
 
 module.exports = DataAccess;

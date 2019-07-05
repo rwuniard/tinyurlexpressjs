@@ -4,6 +4,9 @@ const DataAccess = require('../redis/myRedis');
 // const counter = require('../../mastercounter');
 const map = new String('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789');
 
+// Make exports the same as module export
+var exports = module.exports ={};
+
 //Initialize redis
 var da = new DataAccess("localhost", 6379);
 
@@ -17,9 +20,13 @@ router.get('/getHash', (req, res) => {
     });
 });
 
-// Get the Id.
-router.get('/getId', (req, res) => {
-    var id = reverseTinyURL('dnh');
+// Get the Id. This is exposed to the outside world from this REST service
+// I am not sure this is needed. I just want to show how to pass a parameter 
+// to a GET REST svc.
+router.get('/getId/:tinyUrl', (req, res) => {
+    var tinyUrl = req.params.tinyUrl;
+    console.log('getId params: ' + tinyUrl);
+    var id = reverseTinyURL(tinyUrl);
     console.log(id);
     res.json(id);
 });
@@ -41,6 +48,8 @@ router.post('/getTinyUrl', (req, res) => {
         else {
             data.newAddress = "http://localhost/" + idToShortURL(data.id);
             console.log(data.origAddress);
+            // Persist it in Redis
+            da.setTinyUrl(data.id, data.origAddress);
             res.json(data);
         }
     });
@@ -77,3 +86,4 @@ function reverseTinyURL(tinyUrl) {
 
 
 module.exports = router;
+// exports = reverseTinyURL;
