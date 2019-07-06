@@ -29,4 +29,5 @@ function handleRedirect(request, resp) {
    
 }
 
+//I need to fix this handle. This doesn't seem to be correct, but no idea what's the correct one.
 app.get('*', handleRedirect);
