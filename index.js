@@ -15,12 +15,18 @@ app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
 
 function handleRedirect(request, resp) {
     console.log('orig url:' + request.originalUrl);
-    var redirectUrl = request.originalUrl.replace("/", "");
-    // var id = tinyUrl.reverseTinyURL(redirectUrl);
-    // console.log('id: ' + id);
+    var origUrl = request.originalUrl.replace("/", "");
 
-    console.log('redirectUrl: ' + redirectUrl);
-    resp.redirect('http://google.com');
+    var id = tinyUrl.reverseTinyURL(origUrl);
+    console.log('id: ' + id);
+    console.log('redirectUrl: ' + origUrl);
+    tinyUrl.getRealAddr(id).then( function(result) {
+        var destUrl = result;
+        console.log('destUrl: ' + destUrl);
+        resp.redirect(destUrl);
+    });
+    
+   
 }
 
 app.get('*', handleRedirect);

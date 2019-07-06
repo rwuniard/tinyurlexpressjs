@@ -46,7 +46,7 @@ router.post('/getTinyUrl', (req, res) => {
             res.status(400).json({msg: 'Please include a URL address'});
         }
         else {
-            data.newAddress = "http://localhost/" + idToShortURL(data.id);
+            data.newAddress = "http://localhost:5000/" + idToShortURL(data.id);
             console.log(data.origAddress);
             // Persist it in Redis
             da.setTinyUrl(data.id, data.origAddress);
@@ -74,16 +74,23 @@ function reverseTinyURL(tinyUrl) {
             id = (id * 62) + tinyUrl.charCodeAt(i) - 'a'.charCodeAt(0);
         }
         if ('A'.charCodeAt(0) <= tinyUrl.charCodeAt(i) && tinyUrl.charCodeAt(i) <= 'Z'.charCodeAt(0)) {
-            id = (id *62) + tinyUrl.charCodeAt(i) - 'Z'.charCodeAt(0);
+            id = (id *62) + tinyUrl.charCodeAt(i) - 'A'.charCodeAt(0) + 26;
         }
         if ('0'.charCodeAt(0) <= tinyUrl.charCodeAt(i) && tinyUrl.charCodeAt(i) <= '9'.charCodeAt(0)) {
-            id = (id *62) + tinyUrl.charCodeAt(i) - '0'.charCodeAt(0);
+            id = (id *62) + tinyUrl.charCodeAt(i) - '0'.charCodeAt(0) + 52;
         }
     }
     return id;
+}
 
+function getRealAddr(tinyUrlId) {
+
+    return da.getRealAddr(tinyUrlId);
 }
 
 
 module.exports = router;
-// exports = reverseTinyURL;
+module.exports.reverseTinyURL = reverseTinyURL;
+module.exports.getRealAddr = getRealAddr;
+
+
