@@ -8,7 +8,7 @@ const map = new String('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123
 var exports = module.exports ={};
 
 //Initialize redis
-var da = new DataAccess("localhost", 6379);
+var da = new DataAccess("192.168.2.126", 6379);
 
 
 //Set REST API
