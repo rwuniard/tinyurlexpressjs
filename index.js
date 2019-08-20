@@ -31,3 +31,14 @@ function handleRedirect(request, resp) {
 
 //I need to fix this handle. This doesn't seem to be correct, but no idea what's the correct one.
 app.get('*', handleRedirect);
+
+// NOTES:
+// Run Redis locally, through kinematic is the easiest.
+// docker exec -it redis1 sh -> This will connect through Shell to Redis instance named Redis1
+// Set the masterCounter to 1000 -> SET masterCounter 1000
+// TO use this, please go to Postman.
+// Post : http://localhost:5000/api/tinyUrl/getTinyUrl
+// in the body
+// {
+//	"address": "http://cnn.com"
+// }
